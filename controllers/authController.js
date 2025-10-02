@@ -1,15 +1,19 @@
 import SUPABASE from "../index.js";
+import { validateCredentials } from "../Utils/validator.js";
 
 export const SignUp = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    //checking email and password validation
+    const validationError = validateCredentials(email, password);
+    if (validationError) {
       return res.status(400).json({
         success: false,
-        message: "Missing email or password",
+        message: validationError,
       });
     }
+
     const { data, error } = await SUPABASE.auth.signUp({ email, password });
 
     if (error) {
@@ -28,11 +32,14 @@ export const SignUp = async (req, res) => {
         });
       }
     }
+
+    //Making sure to return a user or error
     const { user: supabaseUser } = data || {};
     if (!data?.user) {
-      res.status(400).json({
-        success: false,
-        message: "Missing user",
+      res.status(200).json({
+        success: true,
+        message:
+          "Sign Up succesful. Please check your email and confirm your account",
       });
     }
 
@@ -55,10 +62,11 @@ export const SignIn = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    const validationError = validateCredentials(email, password);
+    if (validationError) {
       return res.status(400).json({
         success: false,
-        message: "Missing email or password",
+        message: validationError,
       });
     }
 
@@ -86,7 +94,7 @@ export const SignIn = async (req, res) => {
     if (!data?.user) {
       return res.status(400).json({
         success: false,
-        message: "Missing user",
+        message: "User not found",
       });
     }
     res.cookie("access_token", data.session.access_token, {

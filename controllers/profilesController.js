@@ -2,20 +2,41 @@ import {
   createProfile,
   deleteProfile,
   getAllProfiles,
+  getUserProfile,
   updateProfile,
 } from "../service/profileService.js";
 import SUPABASE from "../index.js";
+import { isValidEmail, ValidateBio } from "../Utils/validator.js";
 
 export const createProfileController = async (req, res) => {
   try {
     const { name, email, skills, bio, location } = req.body;
 
+    //checking if email is present
     if (!email) {
       return res.status(400).json({
         success: false,
         message: "Email required",
       });
     }
+
+    //checking email format
+    if (!isValidEmail(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email format",
+      });
+    }
+
+    //checking bio error
+    const bioError = ValidateBio(bio);
+    if (bioError) {
+      return res.status(400).json({
+        success: false,
+        message: bioError,
+      });
+    }
+
     const profile = await createProfile({
       name,
       email,
@@ -50,10 +71,25 @@ export const updateProfileController = async (req, res) => {
       });
     }
 
-    const newProfile = await updateProfile(user, req.body);
+    const { name, bio, location, skills } = req.body;
+
+    const bioError = ValidateBio(bio);
+    if (bioError) {
+      return res.status(400).json({
+        success: false,
+        message: bioError,
+      });
+    }
+    const newProfile = await updateProfile(user, {
+      name,
+      bio,
+      location,
+      skills,
+    });
+
     res.status(200).json({
       success: true,
-      message: "User Profile updated succcessfully",
+      message: "User Profile updated successfully",
       data: newProfile,
     });
   } catch (err) {
@@ -95,7 +131,7 @@ export const getUserProfileController = async (req, res) => {
         message: "User Not signed in",
       });
     }
-    const getProfile = await getUserProfileController(user);
+    const getProfile = await getUserProfile(user);
     res.status(200).json({
       success: true,
       message: "User Profile fetched successfully",
@@ -117,7 +153,7 @@ export const deleteProfileController = async (req, res) => {
     } = await SUPABASE.auth.getUser();
     if (!user) {
       return res.status(401).json({
-        success: true,
+        success: false,
         message: "User not signed in",
       });
     }

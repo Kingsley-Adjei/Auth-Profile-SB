@@ -1,4 +1,4 @@
-import SUPABASE from "../index.js";
+import { SUPABASE } from "../supabaseClient.js";
 import { validateCredentials } from "../Utils/validator.js";
 
 export const SignUp = async (req, res) => {
@@ -74,6 +74,7 @@ export const SignIn = async (req, res) => {
       email,
       password,
     });
+    console.log(data.session.access_token);
 
     if (error) {
       console.error("Supabase error:", error.message);

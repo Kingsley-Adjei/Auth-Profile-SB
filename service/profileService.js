@@ -1,4 +1,4 @@
-import SUPABASE from "../index.js";
+import { SUPABASE } from "../supabaseClient.js";
 
 export const createProfile = async (profileInfo) => {
   const { data, error } = await SUPABASE.from("profiles")

@@ -5,7 +5,7 @@ import {
   getUserProfile,
   updateProfile,
 } from "../service/profileService.js";
-import SUPABASE from "../index.js";
+import { SUPABASE } from "../supabaseClient.js";
 import { isValidEmail, ValidateBio } from "../Utils/validator.js";
 
 export const createProfileController = async (req, res) => {
@@ -135,7 +135,7 @@ export const getUserProfileController = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "User Profile fetched successfully",
-      getProfile,
+      data: getProfile,
     });
   } catch (err) {
     console.error("Error getting user profile");

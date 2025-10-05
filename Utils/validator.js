@@ -2,7 +2,7 @@ export const isValidEmail = (email) =>
   typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
 export const validateCredentials = (email, password) => {
-  if (!email || password) return "Missing email or password";
+  if (!email || !password) return "Missing email or password";
   if (!isValidEmail(email)) return "Invalid email format";
   return null;
 };

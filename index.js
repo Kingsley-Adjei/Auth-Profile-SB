@@ -5,6 +5,8 @@ import authRouter from "./routes/auth.routes.js";
 import profilesRouter from "./routes/profiles.routes.js";
 import messageRouter from "./routes/messages.route.js";
 import { SUPABASE } from "./supabaseClient.js";
+import matchRouter from "./routes/match.routes.js";
+import taskRouter from "./routes/tasks.routes.js";
 
 const app = express();
 
@@ -13,6 +15,8 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/profiles", profilesRouter);
 app.use("/api", messageRouter);
+app.use("/api", matchRouter);
+app.use("/api", taskRouter);
 
 app.listen(`${PORT}`, () => {
   console.log(`Server running on http://localhost:${PORT}`);

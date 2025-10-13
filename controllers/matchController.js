@@ -1,8 +1,8 @@
-import { getMatchFromAI } from "../service/aiService";
+import { getMatchFromGemini } from "../service/aiGeminiService.js";
 import {
   fetchTaskRequirements,
   fetchUserSkills,
-} from "../service/matchService";
+} from "../service/matchService.js";
 
 export const matchController = async (req, res) => {
   try {
@@ -31,15 +31,15 @@ export const matchController = async (req, res) => {
     }
 
     // Talking to microservice
-    const aiResponse = await getMatchFromAI(user.skills, task.requirements);
+    const aiResponse = await getMatchFromGemini(user.skills, task.requirements);
 
     //returning formatted results
     res.status(200).json({
       success: true,
-      data: user_id,
+      user_id,
       task_id,
       match_score: aiResponse.match_score,
-      Comment: aiResponse.Comment,
+      Comment: aiResponse.comment,
     });
   } catch (error) {
     console.log("Something bad occured", error);

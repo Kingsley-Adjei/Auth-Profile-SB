@@ -1,25 +1,25 @@
-import { SUPABASE } from "../supabaseClient";
+import { SUPABASE } from "../supabaseClient.js";
 
 export const fetchUserSkills = async (user_id) => {
-  const { data: userData, error: userErr } = await SUPABASE.from("users")
+  const { data, error } = await SUPABASE.from("profiles")
     .select("skills")
     .eq("id", user_id)
     .single();
 
-  if (userErr) {
-    throw userErr();
+  if (error) {
+    throw error;
   }
-  return userData;
+  return data;
 };
 
 export const fetchTaskRequirements = async (task_id) => {
-  const { data: taskData, error: taskErr } = await SUPABASE.from("tasks")
+  const { data, error } = await SUPABASE.from("tasks")
     .select("requirements")
     .eq("id", task_id)
     .single();
 
-  if (taskErr) {
-    throw taskErr();
+  if (error) {
+    throw error;
   }
-  return taskData;
+  return data;
 };

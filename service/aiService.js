@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AI_SERVICE_URL } from "../config/env";
+import { AI_SERVICE_URL } from "../config/env.js  ";
 
 const AI_URL = AI_SERVICE_URL;
 
